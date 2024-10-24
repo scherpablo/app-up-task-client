@@ -35,7 +35,7 @@ export default function AppLayout() {
 
             <footer className='py-5'>
                 <p className='text-center'>
-                    Todos los derechos reservados {new Date().getFullYear()}
+                    Copyright {new Date().getFullYear()} - Estudio LS
                 </p>
             </footer>
 
