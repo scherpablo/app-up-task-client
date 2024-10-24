@@ -10,7 +10,7 @@ export default function AuthLayout() {
           <Link to={"/"}>
             <Logo />
           </Link>
-          <div className="mt-10">
+          <div className="mt-10 text-center">
             <Outlet />
           </div>
         </div>
