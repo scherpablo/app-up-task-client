@@ -13,6 +13,7 @@ export default function NavMenu({name} : NavMenuProps) {
 
   const queryClient = useQueryClient()
   const logout = () => {
+    queryClient.cancelQueries({queryKey: ['user']})
     localStorage.removeItem('AUTH_TOKEN')
     queryClient.invalidateQueries({queryKey: ['user']})
   }

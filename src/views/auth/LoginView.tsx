@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { UserLoginForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
 import { authenticateUser } from "@/api/AuthAPI";
@@ -14,13 +14,15 @@ export default function LoginView() {
   }
   const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  const { mutate } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: authenticateUser,
     onError: (error) => {
       toast.error(error.message)
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['user'], refetchType: 'all' })
       navigate('/')
     }
   })
@@ -29,11 +31,11 @@ export default function LoginView() {
 
   return (
     <>
-        <h1 className="text-5xl font-black text-white">Iniciar Sesión</h1>
-        <p className="text-2xl font-light text-white mt-5">
-            Comienza a planear tus proyectos {''}
-            <span className=" text-fuchsia-500 font-bold"> iniciando sesión en este formulario</span>
-        </p>
+      <h1 className="text-5xl font-black text-white">Iniciar Sesión</h1>
+      <p className="text-2xl font-light text-white mt-5">
+        Comienza a planear tus proyectos {''}
+        <span className=" text-fuchsia-500 font-bold"> iniciando sesión en este formulario</span>
+      </p>
 
       <form
         onSubmit={handleSubmit(handleLogin)}
@@ -89,15 +91,15 @@ export default function LoginView() {
       </form>
 
       <nav className="mt-10 flex flex-col space-y-4">
-            <Link
-                to={'/auth/register'}
-                className="text-center text-gray-300 font-normal"
-            >¿No tienes cuenta? Crear Una</Link>
+        <Link
+          to={'/auth/register'}
+          className="text-center text-gray-300 font-normal"
+        >¿No tienes cuenta? Crear Una</Link>
 
-            <Link
-                to={'/auth/forgot-password'}
-                className="text-center text-gray-300 font-normal"
-            >¿Olvidaste tu contraseña? Reestablecer</Link>
+        <Link
+          to={'/auth/forgot-password'}
+          className="text-center text-gray-300 font-normal"
+        >¿Olvidaste tu contraseña? Reestablecer</Link>
       </nav>
     </>
   )
