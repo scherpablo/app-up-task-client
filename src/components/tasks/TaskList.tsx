@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 
 type TaskListProps = {
     tasks: TaskProject[]
-    canEdit: boolean
+    canEdit: (task: TaskProject) => boolean
 }
 
 type GroupedTasks = {
@@ -100,7 +100,7 @@ export default function TaskList({ tasks, canEdit }: TaskListProps) {
                                 {tasks.length === 0 ? (
                                     <li className="text-gray-500 text-center pt-3">No Hay tareas</li>
                                 ) : (
-                                    tasks.map(task => <TaskCard key={task._id} task={task} canEdit={canEdit} />)
+                                    tasks.map(task => <TaskCard key={task._id} task={task} canEdit={canEdit(task)} />)
                                 )}
                             </ul>
                         </div>

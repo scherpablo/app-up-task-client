@@ -7,7 +7,8 @@ import EditTaskData from "@/components/tasks/EditTaskData"
 import TaskModalDetails from "@/components/tasks/TaskModalDetails"
 import { useAuth } from "@/hooks/useAuth"
 import { isManager } from "@/utils/policies"
-import { useMemo } from "react"
+//import { useMemo } from "react"
+import { TaskProject } from "@/types/index"
 
 export default function ProjectDetailsView() {
 
@@ -21,7 +22,8 @@ export default function ProjectDetailsView() {
         queryFn: () => getFullProject(projectId),
         retry: false
     })
-    const canEdit = useMemo(() => data?.manager === user?._id , [data, user])
+    const canEditTask = (task: TaskProject) => 
+    !!data && !!user && (isManager(data.manager, user._id) || task.createdBy._id === user._id)
     if (isLoading && authLoading) return 'Cargando...'
     if (isError) return <Navigate to='/404' />
     if (data && user) return (
@@ -29,24 +31,23 @@ export default function ProjectDetailsView() {
             <h1 className="text-5xl font-black">{data.projectName}</h1>
             <p className="text-2xl font-light text-gray-500 mt-5">{data.description}</p>
 
-            {isManager(data.manager, user._id) && (
-                <nav className="my-5 flex gap-3">
-                    <button
-                        type="button"
-                        className="bg-purple-400 hover:bg-purple-500 px-10 py-3 text-white text-xl font-bold cursor-pointer transition-colors"
-                        onClick={() => navigate(location.pathname + '?newTask=true')}
-                    >Agregar Tarea</button>
-
+            <nav className="my-5 flex gap-3">
+                <button
+                    type="button"
+                    className="bg-purple-400 hover:bg-purple-500 px-10 py-3 text-white text-xl font-bold cursor-pointer transition-colors"
+                    onClick={() => navigate(location.pathname + '?newTask=true')}
+                >Agregar Tarea</button>
+                {isManager(data.manager, user._id) && (
                     <Link
                         to={'team'}
                         className="bg-fuchsia-600 hover:bg-fuchsia-700 px-10 py-3 text-white text-xl font-bold cursor-pointer transition-colors"
                     >Colaboradores</Link>
-                </nav>
-            )}
+                )}
+            </nav>
 
             <TaskList
                 tasks={data.tasks}
-                canEdit={canEdit}
+                canEdit={canEditTask}
             />
             <AddTaskModal />
             <EditTaskData />

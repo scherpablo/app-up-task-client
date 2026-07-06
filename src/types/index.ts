@@ -59,6 +59,7 @@ export const taskSchema = z.object({
     notes: z.array(noteSchema.extend({
         createdBy: userSchema
     })),
+    createdBy: userSchema,
     createdAt: z.string(),
     updatedAt: z.string()
 })
@@ -67,7 +68,8 @@ export const taskProjectSchema = taskSchema.pick({
     _id: true,
     name: true,
     description: true,
-    status: true
+    status: true,
+    createdBy: true
 })
 
 export type Task = z.infer<typeof taskSchema>
