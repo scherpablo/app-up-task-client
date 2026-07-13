@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query'
 import { getProjects } from "@/api/ProjectAPI"
 import { useAuth } from '@/hooks/useAuth'
 import { isManager } from '@/utils/policies'
+import { getUnreadCounts } from "@/api/NotificationAPI"
+import NotificationBell from '@/components/notifications/NotificationBell'
 import DeleteProjectModal from '@/components/projects/DeleteProjectModal'
 
 export default function DashboardView() {
@@ -16,6 +18,10 @@ export default function DashboardView() {
   const { data, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: getProjects
+  })
+  const { data: unreadCounts } = useQuery({
+    queryKey: ['unread-counts'],
+    queryFn: getUnreadCounts
   })
   if (isLoading && authLoading) return 'Cargando...'
   if (data && user) return (
@@ -37,7 +43,7 @@ export default function DashboardView() {
               <div className="flex min-w-0 gap-x-4">
                 <div className="min-w-0 flex-auto space-y-2">
                   <div className='mb-2'>
-                    { isManager(project.manager, user._id) ?
+                    {isManager(project.manager, user._id) ?
                       <p className='font-bold text-xs uppercase bg-indigo-50 text-indigo-500 border-2 border-indigo-500 rounded-lg inline-block py-1 px-5'>Manager</p> :
                       <p className='font-bold text-xs uppercase bg-green-50 text-green-500 border-2 border-green-500 rounded-lg inline-block py-1 px-5'>Colaborador</p>
                     }
@@ -54,6 +60,10 @@ export default function DashboardView() {
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-x-6">
+                <NotificationBell
+                  projectId={project._id}
+                  unreadCount={unreadCounts?.[project._id] ?? 0}
+                />
                 <Menu as="div" className="relative flex-none">
                   <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
                     <span className="sr-only">opciones</span>
@@ -73,7 +83,7 @@ export default function DashboardView() {
                         </Link>
                       </Menu.Item>
 
-                      { isManager(project.manager, user._id) && (
+                      {isManager(project.manager, user._id) && (
                         <>
                           <Menu.Item>
                             <Link to={`/projects/${project._id}/edit`}

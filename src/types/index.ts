@@ -112,3 +112,21 @@ const teamMemberSchema = userSchema.pick({
 export const teamMembersSchema = z.array(teamMemberSchema)
 export type TeamMember = z.infer<typeof teamMemberSchema>
 export type TeamMemberForm = Pick<TeamMember, 'email'>
+
+/** Notifications */
+export const notificationTypeSchema = z.enum(["taskCreated", "taskStatusChanged", "taskDeleted", "noteCreated", "noteDeleted"])
+
+export const notificationSchema = z.object({
+    _id: z.string(),
+    type: notificationTypeSchema,
+    message: z.string(),
+    task: z.string().optional(),
+    createdAt: z.string(),
+    isRead: z.boolean()
+})
+
+export const notificationsSchema = z.array(notificationSchema)
+export type Notification = z.infer<typeof notificationSchema>
+
+export const unreadCountsSchema = z.record(z.string(), z.number())
+export type UnreadCounts = z.infer<typeof unreadCountsSchema>
