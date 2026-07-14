@@ -69,8 +69,11 @@ export default function NotificationBell({ projectId, unreadCount }: Notificatio
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                            <div className="max-h-96 overflow-y-auto py-2">
+                        <Popover.Panel
+                            className="absolute right-0 z-10 bottom-full mb-2 w-80 origin-bottom-right rounded-md bg-white shadow-lg ring-1 ring-gray-900/5 focus:outline-none flex flex-col"
+                            style={{ maxHeight: 'min(24rem, 70vh)' }}
+                        >
+                            <div className="overflow-y-auto py-2">
                                 {!notifications || notifications.length === 0 ? (
                                     <p className="px-4 py-3 text-sm text-gray-500 text-center">No hay notificaciones</p>
                                 ) : (
