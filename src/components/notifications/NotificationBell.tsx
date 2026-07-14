@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/20/solid'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
-import { getProjectNotifications, markNotificationAsRead } from '@/api/NotificationAPI'
+import { getProjectNotifications, markNotificationAsRead, markAllNotificationsAsRead } from '@/api/NotificationAPI'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -23,6 +23,14 @@ export default function NotificationBell({ projectId, unreadCount }: Notificatio
 
     const { mutate } = useMutation({
         mutationFn: markNotificationAsRead,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['notifications', projectId] })
+            queryClient.invalidateQueries({ queryKey: ['unread-counts'] })
+        }
+    })
+
+    const { mutate: mutateAll } = useMutation({
+        mutationFn: markAllNotificationsAsRead,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['notifications', projectId] })
             queryClient.invalidateQueries({ queryKey: ['unread-counts'] })
@@ -90,6 +98,17 @@ export default function NotificationBell({ projectId, unreadCount }: Notificatio
                                     ))
                                 )}
                             </div>
+                            {notifications && notifications.some(n => !n.isRead) && (
+                                <div className="border-t border-gray-100 p-2">
+                                    <button
+                                        type="button"
+                                        className="w-full text-center text-sm font-bold text-fuchsia-600 hover:text-fuchsia-700 py-1"
+                                        onClick={() => mutateAll(projectId)}
+                                    >
+                                        Marcar todas como leídas
+                                    </button>
+                                </div>
+                            )}
                         </Popover.Panel>
                     </Transition>
                 </>

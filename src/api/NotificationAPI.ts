@@ -43,3 +43,15 @@ export async function markNotificationAsRead({projectId, notificationId} : {proj
         }
     }
 }
+
+export async function markAllNotificationsAsRead(projectId: string) {
+    try {
+        const url = `/projects/${projectId}/notifications/read-all`
+        const { data } = await api.post<string>(url)
+        return data
+    } catch (error) {
+        if(isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error)
+        }
+    }
+}
