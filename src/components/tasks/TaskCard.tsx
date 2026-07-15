@@ -7,6 +7,7 @@ import {  TaskProject } from "@/types/index"
 import { deleteTask } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
 import { useDraggable } from '@dnd-kit/core'
+import LinkifiedText from '@/components/LinkifiedText'
 
 type TaskCardProps = {
     task: TaskProject
@@ -57,7 +58,7 @@ export default function TaskCard({ task, canEdit }: TaskCardProps) {
                 <p
                     className="text-xl font-bold text-slate-600 text-left"
                 >{task.name}</p>
-                <p className="text-slate-500">{task.description}</p>
+                <LinkifiedText text={task.description} className="text-slate-500" />
             </div>
 
             <div className="flex shrink-0  gap-x-6">

@@ -8,6 +8,7 @@ import { formatDate } from '@/utils/utils';
 import { TaskStatus } from '@/types/index';
 import { statusTranslations } from '@/locales/es';
 import NotesPanel from '../notes/NotesPanel';
+import LinkifiedText from '@/components/LinkifiedText'
 
 export default function TaskModalDetails() {
     const params = useParams()
@@ -86,7 +87,8 @@ export default function TaskModalDetails() {
                                         className="font-black text-4xl text-slate-600 my-5"
                                     >{data.name} </Dialog.Title>
 
-                                    <p className='text-lg text-slate-500 mb-2'>Descripción: {data.description}</p>
+                                    <p className='text-lg text-slate-600 font-bold mb-2'>Descripción:</p>
+                                    <LinkifiedText text={data.description} className="text-lg text-slate-500 mb-2" />
 
                                     {data.completedBy.length ? (
                                         <>
@@ -102,7 +104,7 @@ export default function TaskModalDetails() {
                                                 ))}
                                             </ul>
                                         </>
-                                    ) : null }
+                                    ) : null}
 
 
                                     <div className='my-5 space-y-3'>
@@ -118,7 +120,7 @@ export default function TaskModalDetails() {
                                         </select>
                                     </div>
 
-                                    <NotesPanel 
+                                    <NotesPanel
                                         notes={data.notes}
                                     />
                                 </Dialog.Panel>
