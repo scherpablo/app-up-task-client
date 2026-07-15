@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import {  TaskProject } from "@/types/index"
+import { TaskProject } from "@/types/index"
 import { deleteTask } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
 import { useDraggable } from '@dnd-kit/core'
@@ -16,7 +16,7 @@ type TaskCardProps = {
 
 export default function TaskCard({ task, canEdit }: TaskCardProps) {
 
-    const { attributes, listeners, setNodeRef, transform  } = useDraggable({
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: task._id
     })
     const navigate = useNavigate()
@@ -46,19 +46,29 @@ export default function TaskCard({ task, canEdit }: TaskCardProps) {
     } : undefined
 
     return (
-        <li 
- 
-        className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
-            <div 
-            {...listeners}
-            {...attributes}
-            ref={setNodeRef}
-            style={style}
-            className=" min-w-0 flex flex-col gap-y-4">
-                <p
-                    className="text-xl font-bold text-slate-600 text-left"
-                >{task.name}</p>
-                <LinkifiedText text={task.description} className="text-slate-500" />
+        <li
+
+            className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
+            <div className="min-w-0 flex flex-col gap-y-2 flex-1">
+                <div
+                    {...listeners}
+                    {...attributes}
+                    ref={setNodeRef}
+                    style={style}
+                    className=" min-w-0 flex flex-col gap-y-4">
+                    <p
+                        className="text-xl font-bold text-slate-600 text-left line-clamp-1"
+                    >{task.name}</p>
+                    <LinkifiedText text={task.description} className="text-slate-500 line-clamp-5" />
+                </div>
+
+                <button
+                    type='button'
+                    className='text-fuchsia-600 hover:text-fuchsia-700 font-bold text-sm text-left'
+                    onClick={() => navigate(location.pathname + `?viewTask=${task._id}`)}
+                >
+                    Ver tarea completa
+                </button>
             </div>
 
             <div className="flex shrink-0  gap-x-6">
