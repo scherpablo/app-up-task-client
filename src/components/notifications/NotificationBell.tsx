@@ -24,7 +24,10 @@ export default function NotificationBell({ projectId, unreadCount }: Notificatio
     const { mutate } = useMutation({
         mutationFn: markNotificationAsRead,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['notifications', projectId] })
+            queryClient.fetchQuery({
+                queryKey: ['notifications', projectId],
+                queryFn: () => getProjectNotifications(projectId)
+            })
             queryClient.invalidateQueries({ queryKey: ['unread-counts'] })
         }
     })
@@ -32,7 +35,10 @@ export default function NotificationBell({ projectId, unreadCount }: Notificatio
     const { mutate: mutateAll } = useMutation({
         mutationFn: markAllNotificationsAsRead,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['notifications', projectId] })
+            queryClient.fetchQuery({
+                queryKey: ['notifications', projectId],
+                queryFn: () => getProjectNotifications(projectId)
+            })
             queryClient.invalidateQueries({ queryKey: ['unread-counts'] })
         }
     })
