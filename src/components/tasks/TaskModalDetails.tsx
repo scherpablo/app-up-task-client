@@ -79,7 +79,8 @@ export default function TaskModalDetails() {
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
-                                    <p className='text-sm text-slate-400'>Agregada el: {formatDate(data.createdAt)} </p>
+                                    <p className='text-sm text-slate-400'>Tarea creada por: {data.createdBy.name} </p>
+                                    <p className='text-sm text-slate-400'>Fecha de creación: {formatDate(data.createdAt)} </p>
                                     <p className='text-sm text-slate-400'>Última actualización: {formatDate(data.updatedAt)} </p>
 
                                     <Dialog.Title
